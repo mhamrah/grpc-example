@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+package todos;
+
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+
+service Todos {
+  rpc ListTodos (ListTodosRequest) returns ( ListTodosResponse ) {
+    option (google.api.http) = { get: "/todos" };
+  }
+  rpc GetTodo (GetTodoRequest) returns (Todo) {
+    option (google.api.http) = { get: "/todos/{id}" };
+  }
+  rpc CreateTodo (CreateTodoRequest) returns (Todo) {
+    option (google.api.http) = {
+post: "/todos"
+        body: "todo"
+    };
+  }
+  rpc UpdateTodo (UpdateTodoRequest) returns (Todo ) {
+    option (google.api.http) = {
+patch: "/todos/{todo.id}"
+         body: "todo"
+    };
+  }
+  rpc DeleteTodo (DeleteTodoRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = { delete: "/todos/{id}" };
+  }
+  rpc DeleteAllTodos (google.protobuf.Empty) returns (google.protobuf.Empty) {
+    option (google.api.http) = { delete: "/todos" };
+  }
+}
+
+message Todo {
+  string id = 1;
+  string title = 2;
+  string url = 3;
+  bool completed = 4;
+  int64 order = 5;
+  string test = 6;
+}
+
+message ListTodosRequest {
+
+}
+
+message ListTodosResponse {
+  repeated Todo todos = 1;
+}
+
+message GetTodoRequest {
+  string id = 1;
+}
+
+message DeleteTodoRequest {
+  string id = 1;
+}
+
+message CreateTodoRequest {
+  Todo todo = 1;
+}
+
+message UpdateTodoRequest {
+  Todo todo = 1;
+}

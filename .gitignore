@@ -1,3 +1,6 @@
 gen
 vendor
 !vendor/vendor.json
+.terraform
+terraform.tfvars
+**/*.tfstate*

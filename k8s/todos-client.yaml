@@ -1,0 +1,22 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+   name: todos-client
+   labels:
+      app: todos
+      tier: client
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: todos
+        tier: client
+    spec:
+      containers:
+      - name: todos-client
+        image: gcr.io/grpc-demo-1/todos-client
+        imagePullPolicy: Always
+        env:
+          - name: BACKEND
+            value: "todos-server:50051"
