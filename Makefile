@@ -1,7 +1,7 @@
 CONTAINER=gcr.io/grpc-demo-1
 
 gen/todos.pb.go: todos.proto
-	docker run -v `pwd`:/defs namely/protoc-all:1.14_0 -f todos.proto -l gogo -o gen
+	docker run -v `pwd`:/defs namely/protoc-all:1.14_0 -f todos.proto -l go -o gen
 
 .PHONY: protogen
 protogen: gen/todos.pb.go

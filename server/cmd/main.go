@@ -8,6 +8,7 @@ import (
 	pb "github.com/mhamrah/todos/gen"
 	"github.com/mhamrah/todos/server"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 )
 
 func main() {
@@ -17,5 +18,8 @@ func main() {
 	}
 	grpcServer := grpc.NewServer()
 	pb.RegisterTodosServer(grpcServer, todos.NewServer(todos.MemoryStorage{}))
+
+	reflection.Register(grpcServer)
+
 	grpcServer.Serve(lis)
 }

@@ -14,6 +14,20 @@ spec:
         tier: server
     spec:
       containers:
+      - name: esp
+        image: gcr.io/endpoints-release/endpoints-runtime:1
+        args: [
+          "--http2_port=9000",
+          "--http_port=8080",
+          "--service=todos.endpoints.grpc-demo-1.cloud.goog",
+          "--rollout_strategy=managed",
+          "--backend=grpc://127.0.0.1:50051"
+          ]
+        ports:
+        - name: esp
+          containerPort: 9000
+        - name: esp-http
+          containerPort: 8080
       - name: todos-server
         image: gcr.io/grpc-demo-1/todos-server
         imagePullPolicy: Always
@@ -30,5 +44,28 @@ spec:
     app: todos
     tier: server
   ports:
-  - port: 50051
+  - name: todos-server
+    port: 50051
     targetPort: todos-server
+  - name: esp
+    port: 9000
+    targetPort: esp
+  - name: esp-http
+    port: 8080
+    targetPort: esp-http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: todos-esp
+spec:
+  ports:
+  # Port that accepts gRPC and JSON/HTTP2 requests over HTTP.
+  - port: 80
+    targetPort: 9000
+    protocol: TCP
+    name: http2
+  selector:
+    app: todos
+    tier: server
+  type: LoadBalancer

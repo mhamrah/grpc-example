@@ -30,7 +30,7 @@ variable "password" {}
 resource "google_container_cluster" "primary" {
   name = "${var.cluster_name}"
   region = "${var.region}"
-  initial_node_count = 3
+  initial_node_count = 1
   min_master_version = "1.10" 
 
   master_auth {
@@ -42,6 +42,7 @@ resource "google_container_cluster" "primary" {
     machine_type = "f1-micro"
     oauth_scopes = [
       "https://www.googleapis.com/auth/compute",
+      "https://www.googleapis.com/auth/service.management",
       "https://www.googleapis.com/auth/devstorage.read_only",
       "https://www.googleapis.com/auth/logging.write",
       "https://www.googleapis.com/auth/monitoring"
