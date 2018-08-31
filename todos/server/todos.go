@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/golang/protobuf/ptypes/empty"
-	pb "github.com/mhamrah/todos/gen"
+	pb "github.com/mhamrah/grpc-example/gen"
 	"github.com/oklog/ulid"
 )
 

@@ -1,5 +1,5 @@
 gen
-vendor
+vendor/*
 !vendor/vendor.json
 .terraform
 terraform.tfvars

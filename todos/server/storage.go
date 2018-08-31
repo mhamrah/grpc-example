@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 
-	pb "github.com/mhamrah/todos/gen"
+	pb "github.com/mhamrah/grpc-example/gen"
 )
 
 type Storage interface {

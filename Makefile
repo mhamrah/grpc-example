@@ -11,8 +11,10 @@ deps:
 	go get -u github.com/kardianos/govendor
 	govendor sync
 
-.PHONY: gateway
-gateway: todos.proto
+.PHONY: build
+build: todos.proto
+	docker build --target server -t ${CONTAINER}/todos-server .
+	docker build --target client -t ${CONTAINER}/todos-client .
 	docker run -v `pwd`/todos.proto:/defs/todos.proto -v `pwd`/gen:/defs/gen namely/gen-grpc-gateway -f todos.proto -s Todos
 	docker build -t ${CONTAINER}/todos-gateway gen/grpc-gateway
 
@@ -23,13 +25,11 @@ deploy-gateway: gateway
 
 .PHONY: deploy-server
 deploy-server: protogen
-	docker build --target server -t ${CONTAINER}/todos-server .
 	docker push ${CONTAINER}/todos-server
 	kubectl apply -f k8s/todos-server.yaml
 
 .PHONY: deploy-client
 deploy-client: protogen
-	docker build --target client -t ${CONTAINER}/todos-client .
 	docker push ${CONTAINER}/todos-client
 	kubectl apply -f k8s/todos-client.yaml
 

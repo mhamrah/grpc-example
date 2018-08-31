@@ -5,8 +5,8 @@ import (
 	"log"
 	"net"
 
-	pb "github.com/mhamrah/todos/gen"
-	"github.com/mhamrah/todos/server"
+	pb "github.com/mhamrah/grpc-example/gen"
+	"github.com/mhamrah/grpc-example/todos/server"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )

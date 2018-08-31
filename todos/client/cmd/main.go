@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	pb "github.com/mhamrah/todos/gen"
+	pb "github.com/mhamrah/grpc-example/gen"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 	"google.golang.org/grpc"
