@@ -75,6 +75,8 @@ message DeleteTodoRequest {
 }
 
 message CreateTodoRequest {
+  // ToDo is the ToDo to create. The ID
+  // will be set automatically.
   Todo todo = 1;
 }
 

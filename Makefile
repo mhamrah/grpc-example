@@ -35,5 +35,5 @@ deploy-client: protogen
 
 .PHONY: deploy-endpoints
 deploy-endpoints:
-	docker run -v `pwd`/todos.proto:/defs/todos.proto -v `pwd`/gen:/defs/gen namely/protoc:1.14_0 -I . --descriptor_set_out=gen/api_descriptor.pb --include_imports todos.proto
+	docker run -v `pwd`/todos.proto:/defs/todos.proto -v `pwd`/gen:/defs/gen namely/protoc:1.14_0 -I . --descriptor_set_out=gen/api_descriptor.pb --include_source_info --include_imports todos.proto
 	gcloud endpoints services deploy gen/api_descriptor.pb gcp-endpoints/api_config.yaml
