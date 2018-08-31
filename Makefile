@@ -19,7 +19,7 @@ build: todos.proto
 	docker build -t ${CONTAINER}/todos-gateway gen/grpc-gateway
 
 .PHONY: deploy-gateway
-deploy-gateway: gateway
+deploy-gateway: deploy-gateway
 	docker push ${CONTAINER}/todos-gateway
 	kubectl apply -f k8s/todos-gateway.yaml
 

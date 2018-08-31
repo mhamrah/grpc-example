@@ -5,40 +5,57 @@ package todos;
 import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
 
+// Service Todos is a microservice backend for todo entries.
 service Todos {
+  // ListTodos lists all todos
   rpc ListTodos (ListTodosRequest) returns ( ListTodosResponse ) {
     option (google.api.http) = { get: "/todos" };
   }
+
+  // GetTodo returns a single todo based on an id
   rpc GetTodo (GetTodoRequest) returns (Todo) {
     option (google.api.http) = { get: "/todos/{id}" };
   }
+
+  // CreateTodo creates a new todo and returns the
+  // created todo with an id
   rpc CreateTodo (CreateTodoRequest) returns (Todo) {
     option (google.api.http) = {
 post: "/todos"
         body: "todo"
     };
   }
+
+  // UpdateTodo updates a todo
   rpc UpdateTodo (UpdateTodoRequest) returns (Todo ) {
     option (google.api.http) = {
 patch: "/todos/{todo.id}"
          body: "todo"
     };
   }
+
+  // DeleteTodo deletes a todo in the system
   rpc DeleteTodo (DeleteTodoRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = { delete: "/todos/{id}" };
   }
+
+  // DeleteAllTodos deletes all todos in the system
   rpc DeleteAllTodos (google.protobuf.Empty) returns (google.protobuf.Empty) {
     option (google.api.http) = { delete: "/todos" };
   }
 }
 
+// Todo represents a single todo item. It has an id,
+// url and title, and can be completed and ordered.
 message Todo {
+  // ID is the ID of the Todo
   string id = 1;
+  // Title is a text field describing the ToDo
   string title = 2;
+  // URL is the URL to get the full ToDo information
   string url = 3;
   bool completed = 4;
   int64 order = 5;
-  string test = 6;
 }
 
 message ListTodosRequest {
