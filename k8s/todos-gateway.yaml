@@ -22,7 +22,7 @@ spec:
           containerPort: 80
         env:
           - name: TODOS_BACKEND
-            value: "todos-server:50051"
+            value: "todos-server:9000"
           - name: TODOS_CORS_ALLOW-ORIGIN
             value: "*"
           - name: TODOS_CORS_ALLOW-METHODS

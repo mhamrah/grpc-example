@@ -7,6 +7,10 @@ title: Todos gRPC API
 apis:
   - name: todos.Todos
 
+endpoints:
+  - name: todos.endpoints.grpc-demo-1.cloud.goog
+    target: "35.237.176.243"
+
 usage:
   rules:
     - selector: "*"

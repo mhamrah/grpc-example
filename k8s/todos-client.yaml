@@ -19,4 +19,4 @@ spec:
         imagePullPolicy: Always
         env:
           - name: BACKEND
-            value: "todos-esp:80"
+            value: "todos-server:9000"

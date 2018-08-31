@@ -21,8 +21,13 @@ spec:
           "--http_port=8080",
           "--service=todos.endpoints.grpc-demo-1.cloud.goog",
           "--rollout_strategy=managed",
-          "--backend=grpc://127.0.0.1:50051"
+          "--backend=grpc://127.0.0.1:50051",
+          "-z", "healthz"
           ]
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
         ports:
         - name: esp
           containerPort: 9000
@@ -50,9 +55,10 @@ spec:
   - name: esp
     port: 9000
     targetPort: esp
-  - name: esp-http
+  - name: http
     port: 8080
     targetPort: esp-http
+  type: NodePort
 ---
 apiVersion: v1
 kind: Service
@@ -60,7 +66,6 @@ metadata:
   name: todos-esp
 spec:
   ports:
-  # Port that accepts gRPC and JSON/HTTP2 requests over HTTP.
   - port: 80
     targetPort: 9000
     protocol: TCP
@@ -69,3 +74,35 @@ spec:
     app: todos
     tier: server
   type: LoadBalancer
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: todos-esp-http
+spec:
+  ports:
+  - port: 80
+    targetPort: 8080
+    protocol: TCP
+    name: http
+  selector:
+    app: todos
+    tier: server
+  type: LoadBalancer
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: todos-ingress
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /todos
+        backend:
+          serviceName: todos-server
+          servicePort: 8080
+      - path: /*
+        backend:
+          serviceName: todos-server
+          servicePort: 8080
