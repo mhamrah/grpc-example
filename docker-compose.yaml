@@ -1,0 +1,9 @@
+version: "3.0"
+
+services:
+  todos:
+    image: gcr.io/grpc-demo-1/todos-server
+    ports:
+      - "50051"
+  client:
+    image: gcr.io/grpc-demo-1/todos-client
