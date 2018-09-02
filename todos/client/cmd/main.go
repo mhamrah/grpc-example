@@ -48,6 +48,7 @@ func main() {
 		resp, err := client.CreateTodo(context.Background(), &pb.CreateTodoRequest{Todo: &pb.Todo{Title: "foo"}})
 		if err != nil {
 			log.Printf("error creating todo: %v\n", err)
+			continue
 		}
 
 		result, err := client.GetTodo(context.Background(), &pb.GetTodoRequest{Id: resp.Id})

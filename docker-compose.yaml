@@ -1,9 +1,31 @@
-version: "3.0"
+version: "3.7"
 
 services:
   todos:
-    image: gcr.io/grpc-demo-1/todos-server
+    build:
+       context: .
+       target: server
     ports:
-      - "50051"
+      - "50051:50051"
   client:
-    image: gcr.io/grpc-demo-1/todos-client
+    build:
+      context: .
+      target: client
+    environment:
+      BACKEND: "todos:50051"
+    restart: always
+  todos-gw:
+    build:
+      context: gen/grpc-gateway
+    environment:
+      TODOS_BACKEND: "todos:50051"
+      TODOS_CORS_ALLOW-ORIGIN: "*"
+      TODOS_CORS_ALLOW-METHODS: "GET, OPTIONS, DELETE, POST"
+    ports:
+      - "8080:80"
+
+
+networks:
+  default:
+    name: grpc-example
+

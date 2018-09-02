@@ -2,6 +2,7 @@ CONTAINER=gcr.io/grpc-demo-1
 
 gen/todos.pb.go: todos.proto
 	docker run --rm -v `pwd`:/defs namely/protoc-all:1.14_0 -f todos.proto -l go -o gen
+	docker run -v `pwd`/todos.proto:/defs/todos.proto -v `pwd`/gen:/defs/gen namely/gen-grpc-gateway -f todos.proto -s Todos
 
 .PHONY: protogen
 protogen: gen/todos.pb.go
@@ -15,7 +16,6 @@ deps:
 build: todos.proto
 	docker build --target server -t ${CONTAINER}/todos-server .
 	docker build --target client -t ${CONTAINER}/todos-client .
-	docker run -v `pwd`/todos.proto:/defs/todos.proto -v `pwd`/gen:/defs/gen namely/gen-grpc-gateway -f todos.proto -s Todos
 	docker build -t ${CONTAINER}/todos-gateway gen/grpc-gateway
 
 .PHONY: deploy-gateway

@@ -8,7 +8,10 @@ and running microservices on Kubernetes.
 Generate the required protobuf files with `make protogen`. This will run
 the `protoc` command in the `namely/protoc-all` docker container.
 
-You can run `make build` to build docker containers for the gateway,
+You can use docker-compose to run the client, server and gateway container
+locally. This dockr compose file also creates a default network of `grpc-example` you can later attach too for running `namely/grpc-cli` commands.
+
+You can run with vanilla docker by running `make build` to build docker containers for the gateway,
 client and server.
 
 Alternatively run `make deps` to install govendor and sync package dependencies.
