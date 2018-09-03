@@ -23,6 +23,11 @@ services:
       TODOS_CORS_ALLOW-METHODS: "GET, OPTIONS, DELETE, POST"
     ports:
       - "8080:80"
+  todos-graphql:
+    build:
+      context: todos-graphql
+    ports:
+      - "8000:8000"
 
 
 networks:

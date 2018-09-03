@@ -2,6 +2,7 @@ CONTAINER=gcr.io/grpc-demo-1
 
 gen/todos.pb.go: todos.proto
 	docker run --rm -v `pwd`:/defs namely/protoc-all:1.14_0 -f todos.proto -l go -o gen
+	docker run -v `pwd`:/defs namely/protoc-all:1.14_0 -f todos.proto -l java -o todos-graphql/src/main/java/
 	docker run -v `pwd`/todos.proto:/defs/todos.proto -v `pwd`/gen:/defs/gen namely/gen-grpc-gateway -f todos.proto -s Todos
 
 .PHONY: protogen
