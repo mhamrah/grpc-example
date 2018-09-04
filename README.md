@@ -18,6 +18,23 @@ Alternatively run `make deps` to install govendor and sync package dependencies.
 You can then start a server with `go run server/cmd/main.go`. You can
 also run `go run client/cmd/main.go` to generate some synthetic load.
 
+## Containers
+
+This project has four docker-compose services that are built from
+corresponding dockerfiles.
+
+* `todos` is the backend service (go)
+* `todos-gw` is the generated grpc-gateway from the todos.proto (go)
+* `client` is a simple service that periodically calls the backend, to 
+*   generate sythentic load. (go)
+* `todos-graphq` is a rejoiner-based java app that wrapps the todos endpoint (java)
+
+You can call these services from their name by connecting a docker container to the `grpc-example` 
+network, like so:
+
+```
+docker run --network grpc-example -it --rm alpine /bin/sh
+```
 
 ## Setting Up Kubernetes
 
