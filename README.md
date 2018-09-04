@@ -1,7 +1,7 @@
 # TODOS
 
 A grpc-based [todo backend](http://todobackend.com/) used to demonstrate [gRPC Gateway](https://github.com/grpc-ecosystem/grpc-gateway)
-and running microservices on Kubernetes.
+and running microservices on Kubernetes. This is demo code used for my `gRPC All The Things` talk at Full Stack Fest 2018. [Slides](https://speakerdeck.com/mhamrah/grpc-all-the-things)
 
 ## Running Locally
 
