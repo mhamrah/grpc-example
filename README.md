@@ -27,7 +27,7 @@ corresponding dockerfiles.
 * `todos-gw` is the generated grpc-gateway from the todos.proto (go)
 * `client` is a simple service that periodically calls the backend, to 
 *   generate sythentic load. (go)
-* `todos-graphq` is a rejoiner-based java app that wrapps the todos endpoint (java)
+* `todos-graphq` is a rejoiner-based java app that wraps the todos endpoint (java)
 
 You can call these services from their name by connecting a docker container to the `grpc-example` 
 network, like so:
