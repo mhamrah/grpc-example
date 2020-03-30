@@ -1,16 +1,16 @@
-FROM golang:1.10-alpine3.8 as build
+FROM golang:1.14.1-alpine3.11 as build
 
 RUN apk add --update make git
 
 WORKDIR /go/src/github.com/mhamrah/grpc-example
 COPY . .
 
-RUN make deps
+#RUN make deps
 
 RUN go build -o bin/todos-server todos/server/cmd/main.go
 RUN go build -o bin/todos-client todos/client/cmd/main.go
 
-FROM alpine:3.8 as server
+FROM alpine:3.11 as server
 
 WORKDIR /app
 
@@ -21,7 +21,7 @@ EXPOSE 50051/tcp
 ENTRYPOINT ["/app/server"]
 
 
-FROM alpine:3.8 as client
+FROM alpine:3.11 as client
 
 WORKDIR /app
 
