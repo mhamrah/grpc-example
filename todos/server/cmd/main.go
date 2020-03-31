@@ -28,7 +28,9 @@ func main() {
 		grpcServer.Serve(lis)
 	},
 		func() {
-			log.Println("bubye!")
+			log.Println("Stopping server...")
+			grpcServer.GracefulStop()
+			log.Println("Bubye!")
 		})
 }
 
