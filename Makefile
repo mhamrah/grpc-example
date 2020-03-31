@@ -2,6 +2,7 @@ CONTAINER=gcr.io/grpc-demo-1
 
 gen/todos.pb.go: todos.proto
 	docker run --rm -v `pwd`:/defs namely/protoc-all:1.28_1 -f todos.proto -l go -o gen
+	docker run -v `pwd`/todos.proto:/defs/todos.proto -v `pwd`/gen:/defs/gen namely/protoc:1.28_1 -I . --descriptor_set_out=gen/todos.pb --include_source_info --include_imports todos.proto
 	#docker run -v `pwd`/todos.proto:/defs/todos.proto -v `pwd`/gen:/defs/gen namely/gen-grpc-gateway -f todos.proto -s Todos
 
 .PHONY: protogen
@@ -32,3 +33,10 @@ deploy-client: protogen
 # deploy-endpoints:
 # 	docker run -v `pwd`/todos.proto:/defs/todos.proto -v `pwd`/gen:/defs/gen namely/protoc:1.28_1 -I . --descriptor_set_out=gen/api_descriptor.pb --include_source_info --include_imports todos.proto
 # 	gcloud endpoints services deploy gen/api_descriptor.pb gcp-endpoints/api_config.yaml
+
+.PHONY: envoy
+envoy:
+	docker run -it --rm --name envoy -p 9901:9901 -p 51051:51051 \
+		-v `pwd`/gen/todos.pb:/data/todos.pb:ro \
+		-v `pwd`/envoy-config.yml:/etc/envoy/envoy.yaml:ro \
+		envoyproxy/envoy
