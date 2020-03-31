@@ -27,3 +27,7 @@ the `protoc` command in the `namely/protoc-all` docker container.
 grpcurl -plaintext localhost:50052 describe
 grpcurl -plaintext -d '{ "id": "01E4Q00M7YPD06TX3YW8DMFF8B" }' localhost:50052 todos.Todos/GetTodo
 ```
+
+```
+curl  -X POST http://localhost:51051/todos -H 'Content-Type: application/json' -d '{ "id":  "01E4Q00M7YPD06TX3YW8DMFF8B" }'
+```
