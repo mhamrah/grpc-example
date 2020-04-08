@@ -2,35 +2,40 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net"
 	"os"
 	"os/signal"
 
 	pb "github.com/mhamrah/grpc-example/gen"
 	todos "github.com/mhamrah/grpc-example/todos/server"
+	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
 
 func main() {
+
+	logger, _ := zap.NewProduction()
+	defer logger.Sync() // flushes buffer, if any
+	sugar := logger.Sugar()
+
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", 50052))
 	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
+		sugar.With("error", err).Fatal("failed to listen on port")
 	}
 	grpcServer := grpc.NewServer()
-	pb.RegisterTodosServer(grpcServer, todos.NewServer(todos.MemoryStorage{}))
+	pb.RegisterTodosServer(grpcServer, todos.NewServer(todos.MemoryStorage{}, sugar.Desugar()))
 
 	reflection.Register(grpcServer)
 
 	signalRunner(func() {
-		log.Println("Starting server...")
+		sugar.Info("Starting server, hit Ctrl-C to stop...")
 		grpcServer.Serve(lis)
 	},
 		func() {
-			log.Println("Stopping server...")
+			sugar.Info("Stopping server...")
 			grpcServer.GracefulStop()
-			log.Println("Bubye!")
+			sugar.Info("Bubye!")
 		})
 }
 
@@ -42,7 +47,6 @@ func signalRunner(runner, stopper func()) {
 		runner()
 	}()
 
-	log.Println("hit Ctrl-C to shutdown")
 	select {
 	case <-signals:
 		stopper()

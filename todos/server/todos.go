@@ -9,6 +9,7 @@ import (
 	"github.com/golang/protobuf/ptypes/empty"
 	pb "github.com/mhamrah/grpc-example/gen"
 	"github.com/oklog/ulid"
+	"go.uber.org/zap"
 )
 
 type IDGenerator func() string
@@ -22,13 +23,15 @@ func ulidGenerator(entropy io.Reader) IDGenerator {
 type Server struct {
 	storage Storage
 	genID   IDGenerator
+	logger  *zap.SugaredLogger
 }
 
-func NewServer(storage Storage) *Server {
+func NewServer(storage Storage, logger *zap.Logger) *Server {
 	entropy := rand.New(rand.NewSource(time.Now().UnixNano()))
 	return &Server{
 		storage: storage,
 		genID:   ulidGenerator(entropy),
+		logger:  logger.Sugar(),
 	}
 }
 
@@ -41,6 +44,7 @@ func (s *Server) ListTodos(ctx context.Context, in *pb.ListTodosRequest) (*pb.Li
 }
 
 func (s *Server) GetTodo(ctx context.Context, in *pb.GetTodoRequest) (*pb.Todo, error) {
+	s.logger.With("id", in.Id).Info("Get Todo")
 	return s.storage.Read(ctx, in.Id)
 }
 
