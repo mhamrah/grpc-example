@@ -35,7 +35,7 @@ func main() {
 		func() {
 			sugar.Info("Stopping server...")
 			grpcServer.GracefulStop()
-			sugar.Info("Bubye!")
+			sugar.Info("Bubye Y'all!")
 		})
 }
 

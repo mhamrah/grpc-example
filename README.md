@@ -14,12 +14,25 @@ and running microservices on Kubernetes. This is demo code used for
 ```
 brew cask install bloomrpc
 brew install grpcurl
+brew install minikube
+brew install istioctl
 ```
 
 ## Running Locally
 
 Generate the required protobuf files with `make protogen`. This will run
 the `protoc` command in the `namely/protoc-all` docker container.
+
+## Kubernetes
+
+This project has a skaffold.yaml file and can be run on a minikube-based environment. Install the istioctl and minikube dependencies to experiment then do the following:
+
+1. Start minikube (check for cpu/mem requirements): `minikube start`
+1. Install the demo profile of istio, with Grafana enabled: `istioctl manifest apply --set profile=demo --set addonComponents.grafana.enabled=true`
+1. In a separate terminal window, use Minikube tunnel to easily access services: `minikube tunnel`
+1. Apply the `todos` namespace definition: `k apply -f k8s/setup/namespace.yaml`
+1. Set istio to auto-inject on `todos`: `kubectl label namespace todos istio-injection=enabled`
+1. Run skaffold in dev mode: `skaffold dev`
 
 ## Commands
 

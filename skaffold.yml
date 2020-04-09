@@ -1,0 +1,23 @@
+apiVersion: skaffold/v2beta1
+kind: Config
+metadata:
+  name: todos
+build:
+  artifacts:
+    - image: gcr.io/todos/todos-client
+      docker:
+        dockerfile: Dockerfile
+        target: client
+    - image: gcr.io/todos/todos-server
+      docker:
+        dockerfile: Dockerfile
+        target: server
+deploy:
+  kubectl:
+    manifests:
+      - ./k8s/*.yaml
+portForward:
+  - resourceType: deployment
+    resourceName: todos-server
+    port: 50052
+    localPort: 50052

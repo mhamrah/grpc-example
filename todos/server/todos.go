@@ -2,8 +2,10 @@ package todos
 
 import (
 	"context"
+	"fmt"
 	"io"
 	"math/rand"
+	"os"
 	"time"
 
 	"github.com/golang/protobuf/ptypes/empty"
@@ -52,7 +54,17 @@ func (s *Server) CreateTodo(ctx context.Context, in *pb.CreateTodoRequest) (*pb.
 	input := in.Todo
 	input.Id = s.genID()
 
-	err := s.storage.Save(ctx, input)
+	f, err := os.Open(os.DevNull)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+
+	for i := 0; i < 1000; i++ {
+		fmt.Fprintf(f, ".")
+	}
+
+	err = s.storage.Save(ctx, input)
 	if err != nil {
 		return nil, err
 	}
