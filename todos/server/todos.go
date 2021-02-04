@@ -23,6 +23,7 @@ func ulidGenerator(entropy io.Reader) IDGenerator {
 }
 
 type Server struct {
+	pb.UnimplementedTodosServer
 	storage Storage
 	genID   IDGenerator
 	logger  *zap.SugaredLogger

@@ -11,6 +11,7 @@ import (
 	pb "github.com/mhamrah/grpc-example/gen"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
+	"github.com/tjarratt/babble"
 	"google.golang.org/grpc"
 )
 
@@ -18,7 +19,7 @@ func setupViper() *viper.Viper {
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 	viper.AutomaticEnv()
 
-	flag.String("backend", "", "The gRPC Todo endpoint to call")
+	flag.String("backend", "localhost:50052", "The gRPC Todo endpoint to call")
 
 	pflag.CommandLine.AddGoFlagSet(flag.CommandLine)
 	pflag.Parse()
@@ -30,6 +31,9 @@ func setupViper() *viper.Viper {
 func main() {
 
 	cfg := setupViper()
+	babbler := babble.NewBabbler()
+	babbler.Separator = " "
+	babbler.Count = 5
 
 	log.Printf("contacting backend: %v", cfg.GetString("backend"))
 	conn, err := grpc.Dial(cfg.GetString("backend"), grpc.WithInsecure())
@@ -45,7 +49,7 @@ func main() {
 		millis := 500 + r.Intn(500)
 		<-time.After(time.Duration(millis) * time.Millisecond)
 
-		resp, err := client.CreateTodo(context.Background(), &pb.CreateTodoRequest{Todo: &pb.Todo{Title: "foo"}})
+		resp, err := client.CreateTodo(context.Background(), &pb.CreateTodoRequest{Todo: &pb.Todo{Title: babbler.Babble()}})
 		if err != nil {
 			log.Printf("error creating todo: %v\n", err)
 			continue

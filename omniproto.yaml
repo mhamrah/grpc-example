@@ -1,0 +1,24 @@
+rootdir: protos
+sources: # all sources will be passed together
+  - todos.proto
+  - google/api
+output: gen
+plugins:
+- name: go # the name of the plugin will be suffixed with _out, i.e. go_out.
+  args: paths=source_relative # args will be passed in to the plugin flag
+- name: validate
+  args: lang=go,paths=source_relative
+- name: go-grpc
+  args: paths=source_relative
+- name: grpc-web
+  args: import_style=typescript,mode=grpcwebtext
+  output: svelte/src/gen
+- name: js
+  args: import_style=commonjs
+  output: svelte/src/gen
+descriptors:
+  output: gen/descriptors.pb
+  enabled: true
+  include_imports: true
+  include_source_info: true
+debug: true
